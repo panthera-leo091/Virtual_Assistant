@@ -1,0 +1,11 @@
+1. First select an empity folder or create an empity folder
+2. Press Shift + right click
+3. select "open with powershell" on drop down manu
+4. write command "python -m venv project_env"              # this will create a new virtual environment
+5. Now you can open your IDLE and select your interprater by adding the path to new venv or you can just type ".\project_env\scripts\activate" in your powershell and you will see "project_env" is activated in your powershell
+6. Now varify that the venv is successfully activated or not Write "pip freeze" in you *powershell* or *terminal*
+7. If you see no module and package installed that you have successfully deployed your venv "project_env"
+8. Now install all the requirements in you current venv by pip command "pip install -r requirements.txt" it will install all the requirements that are required to run the code
+9. Since all the requirements are install you are ready to go
+    a. If you are in an IDLE like pycham, vs code or etc just run the awani.py and the Virtual Assistant will be activated
+    b. if you are in terminal or powershell type command *'python -u "path-to-virtual-Assistant-awani.py"'*
