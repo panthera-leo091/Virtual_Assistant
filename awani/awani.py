@@ -1,8 +1,12 @@
 import pyttsx3
 import speech_recognition as sr
+import os
 from datetime import datetime
-from functions import online_ops, os_ops
+import time
+from functions import online_ops
+from functions import os_ops
 import requests
+import winsound as ws
 
 
 # Python text to speech
@@ -27,11 +31,11 @@ def takecommand():
         print("recognizing...")
         query = r.recognize_google(audio, language="en-in")
         print("user said:", query)
+        return query
     except Exception as e:
         print(e)
         print("can't recognize you. try again")
         return "None"
-    return query
 
 def wishMe():
     hour = int(datetime.now().hour)
@@ -44,96 +48,131 @@ def wishMe():
     # speak("welcome sir")
     print('What can I do for you...')
     speak('what can i do for you...')
+    
+def playsound(path):
+    ws.PlaySound(path, ws.SND_FILENAME)
+
+def countdown(sec):
+    while sec > 0:
+        sec -= 1
+        print("\rTime remaing: " + str(sec), end=" ")
+        time.sleep(1)
+    wake = 9
+    print("\nTime's up!")
+    while wake > 0:
+        speak("wake up")
+        wake -= 1
+        time.sleep(.5)
 
 if __name__ == "__main__":
     wishMe()
-    my_name = {"awani", "hey awani", "okay awani", "avani", "hey avani", "okay awani" ,"avni", "hey avni", "okay awani"}
+    my_name = {"awani", "hey awani", "okay awani", "avani", "hey avani", "okay avani" ,"avni", "hey avni", "okay avni"}
     while True:
-        query = takecommand().lower()
-        if "open notepad" in query:
-            os_ops.open_notepad()
+        name = takecommand().lower()
+        if name in my_name:
+            count = 3
+            playsound("start.wav")
+            while count > 0:
+                query = takecommand().lower()
+                if "open notepad" in query:
+                    os_ops.open_notepad()
 
-        elif 'open command prompt' in query or 'open cmd' in query:
-            os_ops.open_cmd()
+                elif 'open command prompt' in query or 'open cmd' in query:
+                    os_ops.open_cmd()
 
-        elif 'open camera' in query:
-            os_ops.open_camera()
+                elif 'open camera' in query:
+                    os_ops.open_camera()
 
-        elif 'open calculator' in query:
-            os_ops.open_calculator()
+                elif 'open calculator' in query:
+                    os_ops.open_calculator()
 
-        elif 'ip address' in query:
-            ip_address = os_ops.get_ip()
-            speak(f'Your IP Address is {ip_address}.\n For your convenience, I am printing it on the screen sir.')
-            print(f'Your IP Address is {ip_address}')
+                elif 'ip address' in query:
+                    ip_address = os_ops.get_ip()
+                    speak(f'Your IP Address is {ip_address}.\n For your convenience, I am printing it on the screen sir.')
+                    print(f'Your IP Address is {ip_address}')
 
-        elif 'wikipedia' in query:
-            speak('What do you want to search on Wikipedia, sir?')
-            search_query = takecommand().lower()
-            results = online_ops.search_Wiki(search_query)
-            speak(f"According to Wikipedia, {results}")
-            speak("For your convenience, I am printing it on the screen sir.")
-            print(results)
+                elif 'wikipedia' in query:
+                    speak('What do you want to search on Wikipedia, sir?')
+                    search_query = takecommand().lower()
+                    results = online_ops.search_Wiki(search_query)
+                    speak(f"According to Wikipedia, {results}")
+                    speak("For your convenience, I am printing it on the screen sir.")
+                    print(results)
 
-        elif 'youtube' in query:
-            speak('What do you want to play on Youtube, sir?')
-            video = takecommand().lower()
-            online_ops.play_Youtube(video)
+                elif 'youtube' in query:
+                    speak('What do you want to play on Youtube, sir?')
+                    video = takecommand().lower()
+                    online_ops.play_Youtube(video)
 
-        elif 'search on google' in query:
-            speak('What do you want to search on Google, sir?')
-            query = takecommand().lower()
-            online_ops.search_Google(query)
+                elif 'search on google' in query:
+                    speak('What do you want to search on Google, sir?')
+                    query = takecommand().lower()
+                    online_ops.search_Google(query)
 
-        elif "send whatsapp message" in query:
-            speak(
-                'On what number should I send the message sir? Please enter in the console: ')
-            number = input("Enter the number: ")
-            speak("What is the message sir?")
-            message = takecommand().lower()
-            online_ops.send_wp_msg(number, message)
-            speak("I've sent the message sir.")
+                elif "send whatsapp message" in query:
+                    speak(
+                        'On what number should I send the message sir? Please enter in the console: ')
+                    number = input("Enter the number: ")
+                    speak("What is the message sir?")
+                    message = takecommand().lower()
+                    online_ops.send_wp_msg(number, message)
+                    speak("I've sent the message sir.")
 
-        elif 'joke' in query:
-            speak(f"Hope you like this one sir")
-            joke = online_ops.get_random_joke()
-            speak(joke)
-            speak("For your convenience, I am printing it on the screen sir.")
-            print(joke)
+                elif 'joke' in query:
+                    speak(f"Hope you like this one sir")
+                    joke = online_ops.get_random_joke()
+                    speak(joke)
+                    speak("For your convenience, I am printing it on the screen sir.")
+                    print(joke)
 
-        elif "advice" in query:
-            speak(f"Here's an advice for you, sir")
-            advice = online_ops.get_random_advice()
-            speak(advice)
-            speak("For your convenience, I am printing it on the screen sir.")
-            print(advice)
+                elif "advice" in query:
+                    speak(f"Here's an advice for you, sir")
+                    advice = online_ops.get_random_advice()
+                    speak(advice)
+                    speak("For your convenience, I am printing it on the screen sir.")
+                    print(advice)
 
-        elif "trending movies" in query:
-            moves = online_ops.get_trending_movies()
-            speak(f"Some of the trending movies are: {moves}")
-            speak("For your convenience, I am printing it on the screen sir.")
-            print(*moves, sep='\n')
+                elif "trending movies" in query:
+                    moves = online_ops.get_trending_movies()
+                    speak(f"Some of the trending movies are: {moves}")
+                    speak("For your convenience, I am printing it on the screen sir.")
+                    print(*moves, sep='\n')
 
-        elif 'news' in query:
-            speak(f"I'm reading out the latest news headlines, sir")
-            speak(online_ops.get_latest_news())
-            speak("For your convenience, I am printing it on the screen sir.")
-            print(*online_ops.get_latest_news(), sep='\n')
+                elif 'news' in query:
+                    speak(f"I'm reading out the latest news headlines, sir")
+                    speak(online_ops.get_latest_news())
+                    speak("For your convenience, I am printing it on the screen sir.")
+                    print(*online_ops.get_latest_news(), sep='\n')
 
-        elif 'weather' in query:
-            ip_address = online_ops.find_my_ip()
-            city = requests.get(f"https://ipapi.co/{ip_address}/city/").text
-            speak(f"Getting weather report for your city {city}")
-            weather, temperature, feels_like = online_ops.get_weather_report(city)
-            speak(f"The current temperature is {temperature}, but it feels like {feels_like}")
-            speak(f"Also, the weather report talks about {weather}")
-            speak("For your convenience, I am printing it on the screen sir.")
-            print(f"Description: {weather}\nTemperature: {temperature}\nFeels like: {feels_like}")
+                elif 'weather' in query:
+                    ip_address = online_ops.find_my_ip()
+                    city = requests.get(f"https://ipapi.co/{ip_address}/city/").text
+                    speak(f"Getting weather report for your city {city}")
+                    weather, temperature, feels_like = online_ops.get_weather_report(city)
+                    speak(f"The current temperature is {temperature}, but it feels like {feels_like}")
+                    speak(f"Also, the weather report talks about {weather}")
+                    speak("For your convenience, I am printing it on the screen sir.")
+                    print(f"Description: {weather}\nTemperature: {temperature}\nFeels like: {feels_like}")
 
-        elif 'the date' in query:
-            strDate = datetime.now().date
-            speak(f"Sir, the Date is {strDate}")
+                elif 'the date' in query:
+                    strDate = datetime.now().date
+                    speak(f"Sir, the Date is {strDate}")
 
-        elif 'the time' in query:
-            strTime = datetime.now().strftime("%H:%M:%S")
-            speak(f"Sir, the time is {strTime}")
+                elif 'the time' in query:
+                    strTime = datetime.now().strftime("%H:%M:%S")
+                    speak(f"Sir, the time is {strTime}")
+
+                elif "wake me" in query:
+                    speak("when do you want me to wake you")
+                    speak("enter time")
+                    if "minutes" in query or "min" in query or "minute" in query:
+                        t = int(input("Enter Time(in min): "))
+                        sec = t * 60
+                    else:
+                        sec = int(input("Enter Time(in sec): "))
+                    countdown(sec)
+
+                else:
+                    count -= 1
+            playsound("end.wav")
+        os.system("cls")
